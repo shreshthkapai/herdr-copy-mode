@@ -27,3 +27,7 @@ Delete `~/.config/herdr-app/mods/copy-mode/` and the `ctrl-shift-y` line from `k
 ## Tests
 
 `cd copy-mode && npm test` runs the pure logic tests with node.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
