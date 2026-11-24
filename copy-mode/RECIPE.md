@@ -35,7 +35,7 @@ It opens with the cursor on the last row with text, scrolled to the bottom. Keys
 | `q` | Close without copying. |
 | Click | Close without copying. |
 
-- **Agents.** In a working agent Herdr hands over only the screen; when the agent is idle or done, the history comes too. Claude Code's fullscreen mode (`"tui": "fullscreen"`) keeps no history in the terminal, the same as in tmux; Herdr stitches it together by scrolling the agent's own view.
+- **Agents.** In a working agent Herdr hands over only the screen; when the agent is idle or done, the history comes too. Claude Code's fullscreen mode (`"tui": "fullscreen"`) keeps no history in the terminal, the same as in tmux; Herdr stitches it together by scrolling the agent's own view. That can take a few seconds the first time, so copy mode opens on the screen at once and adds the history above when it arrives, keeping the cursor and selection on the same lines.
 - **Long lines.** A line wider than the terminal shows on several rows, as on the screen. `y` on any of them copies the whole line, and a selection across those rows joins them without a line break.
 - **Closing** gives keyboard focus back to the terminal.
 

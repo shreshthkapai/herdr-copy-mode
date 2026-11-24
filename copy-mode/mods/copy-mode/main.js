@@ -81,14 +81,28 @@ export default class CopyMode extends View {
     const terminal = focused()?.terminal;
     if (!terminal) return this.close();
     this.terminal = terminal;
+    // The screen alone reads in milliseconds; history can take seconds while
+    // the core stitches an idle agent's transcript, so it lands afterwards.
     cx.spawn(async (cx) => {
-      const read = await hc(["read", terminal, "--json", "--lines", String(HISTORY_LINES)]);
-      if (read.code !== 0) return this.close();
-      const text = JSON.parse(read.stdout).text.replace(/\n$/, "").split("\n");
-      ({ lines: this.lines, continued: this.continued } = wrap(text, this.grid?.cols || Infinity));
+      if (!(await this.load(0))) return this.close();
       this.start();
       cx.notify();
+      const before = this.lines.length;
+      if (!(await this.load(HISTORY_LINES))) return;
+      const added = this.lines.length - before;
+      this.cursor.row += added;
+      this.top += added;
+      if (this.anchor) this.anchor.row += added;
+      cx.notify();
     });
+  }
+
+  async load(history) {
+    const read = await hc(["read", this.terminal, "--json", "--lines", String(history)]);
+    if (read.code !== 0) return false;
+    const text = JSON.parse(read.stdout).text.replace(/\n$/, "").split("\n");
+    ({ lines: this.lines, continued: this.continued } = wrap(text, this.grid?.cols || Infinity));
+    return true;
   }
 
   // Runs once the text and the window size are both known: the view shows the
